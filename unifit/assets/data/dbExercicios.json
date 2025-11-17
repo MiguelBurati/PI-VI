@@ -1,0 +1,26 @@
+{
+  "ex001": {
+    "nome": "Esteira",
+    "videoUri": "https://www.youtube.com/watch?v=URL_DO_VIDEO_ESTEIRA"
+  },
+  "ex002": {
+    "nome": "Leg Press",
+    "videoUri": "https://www.youtube.com/watch?v=URL_DO_VIDEO_LEGPRESS"
+  },
+  "ex003": {
+    "nome": "Agachamento",
+    "videoUri": "https://www.youtube.com/watch?v=URL_DO_VIDEO_AGACHAMENTO"
+  },
+  "ex004": {
+    "nome": "Agachamento Sumo",
+    "videoUri": "https://www.youtube.com/watch?v=URL_DO_VIDEO_SUMO"
+  },
+  "ex005": {
+    "nome": "Cadeira Flexora",
+    "videoUri": "https://www.youtube.com/watch?v=URL_DO_VIDEO_FLEXORA"
+  },
+  "ex006": {
+    "nome": "Panturrilha Máquina",
+    "videoUri": "https://www.youtube.com/watch?v=URL_DO_VIDEO_PANTURRILHA"
+  }
+}

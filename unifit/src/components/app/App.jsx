@@ -21,7 +21,7 @@ function CustomDrawerContent(props) {
   const fakeUser = {
     nome: "Beutrano",
     id: "#0001",
-    foto: require('../../../assets/users/user1.jpeg')
+    foto: require('../../../assets/users/user01.jpeg')
   };
 
   return(

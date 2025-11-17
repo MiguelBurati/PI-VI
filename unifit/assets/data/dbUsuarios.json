@@ -1,0 +1,109 @@
+{
+  "user_1234": {
+    "usuario": {
+      "nome": "Jonas Silva",
+      "id": 1234,
+      "matricula": true,
+      "fotoUri": "./assets/users/user01.jpeg"
+    },
+    "programacaoSemanal": [
+      {
+        "idDia": "dom",
+        "diaDaSemana": "Domingo",
+        "nomeTreino": "Cardio",
+        "exercicios": [
+          {
+            "idEx": "ex001",
+            "series": 1,
+            "repeticoes": "30 min",
+            "carga": null
+          }
+        ]
+      },
+      {
+        "idDia": "seg",
+        "diaDaSemana": "Segunda-feira",
+        "nomeTreino": "Perna",
+        "exercicios": [
+          {
+            "idEx": "ex002",
+            "series": 4,
+            "repeticoes": "10-12",
+            "carga": null
+          },
+          {
+            "idEx": "ex003",
+            "series": 4,
+            "repeticoes": "8-10",
+            "carga": null
+          },
+          {
+            "idEx": "ex004",
+            "series": 3,
+            "repeticoes": "15",
+            "carga": null
+          },
+          {
+            "idEx": "ex005",
+            "series": 4,
+            "repeticoes": "12",
+            "carga": null
+          },
+          {
+            "idEx": "ex006",
+            "series": 5,
+            "repeticoes": "15",
+            "carga": null
+          }
+        ]
+      },
+      {
+        "idDia": "ter",
+        "diaDaSemana": "Terça-feira",
+        "nomeTreino": "Costas",
+        "exercicios": []
+      }
+    ]
+  },
+  "user_5678": {
+    "usuario": {
+      "nome": "Maria Souza",
+      "id": 5678,
+      "matricula": false,
+      "fotoUri": "./assets/users/user02.jpeg"
+    },
+    "programacaoSemanal": [
+      {
+        "idDia": "dom",
+        "diaDaSemana": "Domingo",
+        "nomeTreino": "Descanso",
+        "exercicios": []
+      },
+      {
+        "idDia": "seg",
+        "diaDaSemana": "Segunda-feira",
+        "nomeTreino": "Adaptação A",
+        "exercicios": [
+          {
+            "idEx": "ex002",
+            "series": 3,
+            "repeticoes": "15",
+            "carga": null
+          },
+          {
+            "idEx": "ex005",
+            "series": 3,
+            "repeticoes": "15",
+            "carga": null
+          }
+        ]
+      },
+      {
+        "idDia": "ter",
+        "diaDaSemana": "Terça-feira",
+        "nomeTreino": "Descanso",
+        "exercicios": []
+      }
+    ]
+  }
+}

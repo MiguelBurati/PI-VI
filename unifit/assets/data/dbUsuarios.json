@@ -1,10 +1,10 @@
 {
   "user_1234": {
     "usuario": {
-      "nome": "Jonas Silva",
+      "nome": "Teste 1",
       "id": 1234,
       "matricula": true,
-      "fotoUri": "./assets/users/user01.jpeg"
+      "fotoUri": "https://i.pinimg.com/1200x/0e/fb/61/0efb6114dea714848e0bb9fdfae651aa.jpg"
     },
     "programacaoSemanal": [
       {
@@ -63,14 +63,15 @@
         "nomeTreino": "Costas",
         "exercicios": []
       }
+      
     ]
   },
   "user_5678": {
     "usuario": {
-      "nome": "Maria Souza",
+      "nome": "Teste 2",
       "id": 5678,
       "matricula": false,
-      "fotoUri": "./assets/users/user02.jpeg"
+      "fotoUri": "https://i.pinimg.com/736x/bb/00/fb/bb00fbabd0a58d0bc918cb8bd5664837.jpg"
     },
     "programacaoSemanal": [
       {

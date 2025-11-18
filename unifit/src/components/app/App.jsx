@@ -1,12 +1,13 @@
+import { StyleSheet, Text, View, Image } from 'react-native';
 import { DrawerActions, NavigationContainer, DefaultTheme } from '@react-navigation/native';
 
-import { StyleSheet, Text, View, Image } from 'react-native';
+import dbUsuarios from '../../../assets/data/dbUsuarios.json';
 
 import { 
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItemList
- } from '@react-navigation/drawer';
+} from '@react-navigation/drawer';
 
 //import das telas 
 import Home from '../home/home';
@@ -18,11 +19,14 @@ const Drawer = createDrawerNavigator();
 
 //refazer drawer pra por a imagem
 function CustomDrawerContent(props) {
-  const fakeUser = {
-    nome: "Beutrano",
-    id: "#0001",
-    foto: require('../../../assets/users/user01.jpeg')
-  };
+
+  const idUsuarioLogado = "user_1234";
+  const dadosUsuario = dbUsuarios[idUsuarioLogado];
+
+  const nomeUsuario = dadosUsuario.usuario.nome;
+  const idUsuario = dadosUsuario.usuario.id;
+  const fotoUri = dadosUsuario.usuario.fotoUri;
+  const fotoUsuario = {uri: fotoUri};
 
   return(
     <DrawerContentScrollView
@@ -32,10 +36,10 @@ function CustomDrawerContent(props) {
     >
 
       <View style={styles.userInfoContainer}>
-        <Image source={fakeUser.foto} style={styles.userImage} />
+        <Image source={fotoUsuario.uri} style={styles.userImage} />
         <View>
-          <Text style={styles.userName}>{fakeUser.nome}</Text>
-          <Text style={styles.userId}>{fakeUser.id}</Text>
+          <Text style={styles.userName}>{nomeUsuario}</Text>
+          <Text style={styles.userId}>#{idUsuario}</Text>
         </View>
       </View>
       <DrawerItemList {...props}/>
@@ -48,7 +52,7 @@ const Tema = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: '#595959', // A sua cor
+    background: '#595959',
     card: '#ffffff',
   },
 };

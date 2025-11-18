@@ -5,6 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useTreinoProgramacao} from '../useTreinoProgramacao/useTreinoProgramacao';
 
 const ItemData = ({dia, nomeTreino, isSelected, onPress}) => {
+  // Estilos dinâmicos baseados na seleção
   const itemStyle = [
     styles.containerDiaSemana,
     {

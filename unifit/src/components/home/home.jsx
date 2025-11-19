@@ -1,24 +1,30 @@
 import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
-
+import { useNavigation } from '@react-navigation/native';
 
 import { useTreinoProgramacao } from '../useTreinoProgramacao/useTreinoProgramacao';
-
-import Treino from '../treino/treino.jsx';
-import { useNavigation } from '@react-navigation/native';
 
 export default function Home() {
 
   const navigation = useNavigation();
 
-  const { nomeTreino, listaExerciciosDoDia } = useTreinoProgramacao("user_1234", false);
-
+  const usarDiaReal = false; 
+  const { nomeTreino, listaExerciciosDoDia } = useTreinoProgramacao("user_1234", usarDiaReal);
   
+  const diaIndex = usarDiaReal ? new Date().getDay() : 1; 
+  const idDiaHoje = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'][diaIndex];
+
   return (
     <View style={styles.containerPrincipal}>
         <View style={styles.containerGeral}>
             <View>
-                <Text style={styles.textUpContainer}>Treino do Dia</Text>
-                <TouchableOpacity style={styles.containerBranco} onPress={() => navigation.navigate('Treino')}>
+               
+                <Text style={styles.textUpContainer}>Treino de {nomeTreino}</Text>
+                
+                <TouchableOpacity 
+                    style={styles.containerBranco} 
+                    
+                    onPress={() => navigation.navigate('Treino', { diaId: idDiaHoje })}
+                >
                   <FlatList
                     data={listaExerciciosDoDia}
                     keyExtractor={(item) => item.id}
@@ -29,10 +35,16 @@ export default function Home() {
                   />
                 </TouchableOpacity>
             </View>
+            
             <View>
                 <Text style={styles.textUpContainer}>Ranking</Text>
                 <View style={styles.containerBranco}>
-                  <Text style={styles.listRanking}>Posição:<br/>Dias:<br/>Pontos:<br/></Text>
+                  
+                  <Text style={styles.listRanking}>
+                    Posição:<br/>
+                    Dias Ativos:<br/>
+                    Pontos:
+                  </Text>
                 </View>
             </View>
         </View>
@@ -54,6 +66,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: 50,
+    width: '100%',
   },
 
   containerBranco: {
@@ -63,12 +76,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 2,
     borderColor: '#e0e0e0',
+    justifyContent: 'center', 
+    alignItems: 'center',
   },
 
   textUpContainer: {
     color:'#ffff',
     marginLeft:10,
     marginBottom:5,
+    fontSize: 18, 
+    fontWeight: 'bold',
   },
 
   listContainer: {
@@ -82,8 +99,8 @@ const styles = StyleSheet.create({
   listRanking: {
     fontSize: 15,
     color: '#333333ff',
-    margin:'auto', 
-    
+    textAlign: 'left',
+    padding: 15,
   }
 
 });

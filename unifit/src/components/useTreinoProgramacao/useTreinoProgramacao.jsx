@@ -1,43 +1,51 @@
-import dbExercicios from "../../../assets/data/dbExercicios.json"
-import dbUsuarios from '../../../assets/data/dbUsuarios.json';
+import dbExercicios from "../../../assets/data/dbExercicios.json";
 import { useState, useEffect } from 'react';
+
 
 /**
  * Custom Hook para buscar e processar os dados de treino do usuário logado.
- * * @param {string} idUsuarioLogado
+ * * RECEBE A LISTA DE USUÁRIOS COMO UMA PROP.
+ * * @param {object} allUsers - O objeto completo de usuários do useAdminUsuarios.
+ * @param {string} idUsuarioLogado
  * @param {boolean} usarDiaReal 
  * @returns {{
  * listaExerciciosDoDia: Array, 
  * nomeTreino: string, 
  * diaDaSemana: string, 
- * programacaoSemanalCompleta: Array // <-- Adicionado para a tela de Programação
+ * programacaoSemanalCompleta: Array 
  * }}
  */
-export const useTreinoProgramacao = (idUsuarioLogado, usarDiaReal = true) => {
+export const useTreinoProgramacao = (allUsers, idUsuarioLogado, usarDiaReal = true) => {
     
     const [dadosTreino, setDadosTreino] = useState({
         listaExerciciosDoDia: [{ id: 'carregando', nome: 'Carregando treino...' }],
         nomeTreino: 'Carregando...',
         diaDaSemana: '...',
-        programacaoSemanalCompleta: []
+        programacaoSemanalCompleta: [] 
     });
-
-    // Variável temporária para armazenar a lista completa fora do estado
-    let programacaoCompleta = []; 
 
     useEffect(() => {
         
         let listaExercicios = [];
         let nomeTreinoAtual = "Descanso";
         let diaDaSemanaAtual = "";
+        let programacaoCompleta = [];
+
+        if (!allUsers || Object.keys(allUsers).length === 0) {
+             setDadosTreino(prev => ({ ...prev, nomeTreino: "Aguardando dados...", programacaoSemanalCompleta: [] }));
+             return;
+        }
 
         try {
-            // LÓGICA DE BUSCA DE DADOS
-            const dadosUsuario = dbUsuarios[idUsuarioLogado];
+
+            const dadosUsuario = allUsers[idUsuarioLogado];
             
+            if (!dadosUsuario) {
+                 throw new Error(`Usuário ${idUsuarioLogado} não encontrado.`);
+            }
+
             programacaoCompleta = dadosUsuario.programacaoSemanal; 
-            
-            // LÓGICA DE BUSCA DO DIA
+
             let diaIndex;
             if (usarDiaReal) {
                 diaIndex = new Date().getDay();
@@ -77,14 +85,13 @@ export const useTreinoProgramacao = (idUsuarioLogado, usarDiaReal = true) => {
             }
 
         } catch (error) {
-            console.error("Erro CRÍTICO ao carregar treinos:", error);
+            console.error("Erro ao carregar treinos:", error);
             listaExercicios = [{ id: 'erro', nome: 'Erro ao carregar dados.' }];
             nomeTreinoAtual = "Erro";
             diaDaSemanaAtual = "Erro";
             programacaoCompleta = [];
         }
-        
-        // Atualiza o estado com os dados finais
+
         setDadosTreino({
             listaExerciciosDoDia: listaExercicios,
             nomeTreino: nomeTreinoAtual,
@@ -92,7 +99,7 @@ export const useTreinoProgramacao = (idUsuarioLogado, usarDiaReal = true) => {
             programacaoSemanalCompleta: programacaoCompleta 
         });
 
-    }, [idUsuarioLogado, usarDiaReal]);
+    }, [allUsers, idUsuarioLogado, usarDiaReal]); 
     
     return dadosTreino;
 };

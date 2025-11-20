@@ -1,25 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput, ScrollView, SafeAreaView, Linking } from 'react-native'; // Importar Linking
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput, SafeAreaView, Linking } from 'react-native'; 
 import { useRoute } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons'; 
-
-import { useTreinoProgramacao } from '../useTreinoProgramacao/useTreinoProgramacao'; 
-import dbExercicios from "../../../assets/data/dbExercicios.json" 
-import dbUsuarios from '../../../assets/data/dbUsuarios.json'; 
+import { useUser } from '../../context/UserContext'; 
+import dbExercicios from '../../../assets/data/dbExercicios.json'; 
 
 const ExercicioAcordeao = ({ exercicio }) => {
-    
     const [expandido, setExpandido] = useState(false); 
+
     const [cargas, setCargas] = useState(
       Array(exercicio.series).fill(exercicio.carga || '')
     );
 
     const handleVideoPress = () => {
-        const videoUri = dbExercicios[exercicio.id].videoUri;
+        const videoUri = dbExercicios[exercicio.id] ? dbExercicios[exercicio.id].videoUri : null;
+        
         if (videoUri) {
-            Linking.openURL(videoUri).catch(err => console.error("Não foi possível abrir o link", err));
+            Linking.openURL(videoUri).catch(err => console.error("Erro ao abrir link", err));
         } else {
-            alert("Nenhum vídeo disponível para este exercício.");
+            alert("Vídeo não disponível para este exercício.");
         }
     };
 
@@ -52,16 +51,17 @@ const ExercicioAcordeao = ({ exercicio }) => {
 
     return (
         <View style={styles.exercicioCard}>
-            
             <TouchableOpacity 
                 onPress={() => setExpandido(!expandido)}
                 style={styles.headerAcordeao}
             >
+                <Text style={styles.nomeExercicio}>{exercicio.nome}</Text>
+                
+               
                 <TouchableOpacity onPress={handleVideoPress} style={styles.videoIconContainer}>
-                    <FontAwesome name="play-circle" size={28} color="#555" /> {/* Ícone de vídeo */}
+                    <FontAwesome name="play-circle" size={28} color="#D96600" /> 
                 </TouchableOpacity>
 
-                <Text style={styles.nomeExercicio}>{exercicio.nome}</Text>
                 
                 <FontAwesome 
                     name={expandido ? "angle-up" : "angle-down"} 
@@ -72,9 +72,7 @@ const ExercicioAcordeao = ({ exercicio }) => {
 
             {expandido && (
                 <View style={styles.conteudoAcordeao}>
-                   
                     {renderSeries()}
-                    
                     <Text style={styles.pontosText}>Pontos: 10</Text>
                 </View>
             )}
@@ -83,51 +81,59 @@ const ExercicioAcordeao = ({ exercicio }) => {
 };
 
 export default function Treino() {
-    
     const route = useRoute();
     const { diaId } = route.params || {}; 
-    
-    const { programacaoSemanalCompleta } = useTreinoProgramacao("user_1234", false);
+    const { currentUser } = useUser(); 
 
-    const treinoDoDia = programacaoSemanalCompleta.find(dia => dia.idDia === diaId);
+    if (!currentUser) return (
+        <SafeAreaView style={styles.containerPrincipal}>
+            <Text style={styles.screenTitle}>Erro: Usuário não logado</Text>
+        </SafeAreaView>
+    );
+
+ 
+    const idDoDia = diaId || 'seg';
+    const treinoDoDia = currentUser.programacaoSemanal.find(dia => dia.idDia === idDoDia);
     
     let listaExercicios = [];
-    let nomeTreino = "Carregando...";
+    let nomeTreino = "Treino";
 
     if (treinoDoDia) {
         nomeTreino = treinoDoDia.nomeTreino;
         if (treinoDoDia.exercicios.length > 0) {
             listaExercicios = treinoDoDia.exercicios.map(prescrito => {
-                const infoExercicio = dbExercicios[prescrito.idEx];
-                
-                return {
+                const info = dbExercicios[prescrito.idEx];
+                return { 
+                    ...prescrito, 
                     id: prescrito.idEx, 
-                    nome: infoExercicio ? infoExercicio.nome : 'Ex. Não encontrado',
-                    series: prescrito.series,
-                    repeticoes: prescrito.repeticoes,
-                    carga: prescrito.carga,
+                    nome: info ? info.nome : 'Ex. Não encontrado' 
                 };
             });
         } else {
+            
              listaExercicios = [{ id: 'descanso', nome: 'Descanso. Aproveite!' }];
         }
     }
 
     return (
         <SafeAreaView style={styles.containerPrincipal}>
-            
             <Text style={styles.screenTitle}>
-                {treinoDoDia ? `Treino de ${nomeTreino}` : 'Carregando Treino...'}
+                {treinoDoDia ? `Treino de ${nomeTreino}` : 'Carregando...'}
             </Text>
             
             <FlatList
                 data={listaExercicios}
                 keyExtractor={(item) => item.id}
-                renderItem={({ item }) => <ExercicioAcordeao exercicio={item} />}
+   
+                renderItem={({ item }) => {
+                    if (item.id === 'descanso') {
+                        return <Text style={{color:'#fff', textAlign:'center', marginTop: 20}}>{item.nome}</Text>
+                    }
+                    return <ExercicioAcordeao exercicio={item} />
+                }} 
                 contentContainerStyle={styles.listContent}
                 showsVerticalScrollIndicator={false}
             />
-            
         </SafeAreaView>
     );
 }
@@ -171,19 +177,16 @@ const styles = StyleSheet.create({
         color: '#333',
         flex: 1, 
     },
-    
     videoIconContainer: {
         marginLeft: 10, 
         marginRight: 10, 
     },
-
     conteudoAcordeao: {
         padding: 15,
         backgroundColor: '#f9f9f9', 
         borderTopWidth: 1,
         borderTopColor: '#e0e0e0',
     },
-
     pontosText: {
         fontSize: 14,
         fontWeight: 'bold',
@@ -191,7 +194,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         textAlign: 'right',
     },
-    
     serieRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
